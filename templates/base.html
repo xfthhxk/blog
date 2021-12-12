@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>{{title}}</title>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
+
+    <!-- font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+
+    <!-- highlight js -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/styles/base16/spacemacs.min.css" integrity="sha512-BFBo9dTzdUDhov4I42NmNQSkJ8BJvwmYro/rdauuI7onMO21954mTQncg5o92ZCwgHf4UAsPMCTTt7/hVPhn5A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/highlight.min.js" integrity="sha512-Pbb8o120v5/hN/a6LjF4N4Lxou+xYZ0QcVF8J6TWhBbHmctQWd8O6xTDmHpE/91OjPzCk4JRoiJsexHYg4SotQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/languages/clojure.min.js" integrity="sha512-GIeXBgFGG/Jkz4Ww9+AckIKcMdpODoSojao/3ALL7bQz2CXVRqGaIOam7/hR9+rn1X953S85c05Qm9jqIxYc8A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <link type="application/atom+xml" rel="alternate" href="blog/atom.xml" title="Hakahaka">
+    <link rel="stylesheet" href="/blog/assets/css/style.css">
+  </head>
+  <body>
+
+    <div class="site-header">
+      <div class="wrapper">
+        <div class="site-nav">
+          <a class="page-link" href="/blog/archive.html">Archive</a>
+          <a class="page-link" href="https://github.com/xfthhxk/blog/discussions/categories/posts">Discuss</a>
+          <a class="page-link" href="https://github.com/xfthhxk">About</a>
+          <a class="page-link" href="atom.xml">
+            <img class="page-icon" src="https://www.svgrepo.com/show/362316/feed.svg" width="30px"/>
+          </a>
+        </div>
+        <div>
+          <h1 class="site-title">
+            <a class="page-link" href="/blog/index.html">Hakahaka</a>
+          </h1>
+          <p>Mostly Clojure</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="wrapper">
+
+      {{body | safe }}
+
+      {% if not skip-archive %}
+      <div style="margin-bottom: 20px; float: right;">
+        <a class="page-link" href="/blog/archive.html">Archive</a>
+      </div>
+      {% endif %}
+    </div>
+    <script>
+      document.addEventListener('DOMContentLoaded', (event) => {
+        hljs.highlightAll();
+      });
+    </script>
+  </body>
+</html>

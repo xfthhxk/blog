@@ -1,0 +1,8 @@
+{:title "GCP Load Balancer"
+ :file "gcp-load-balancer.md"
+ :categories #{"clojure" "gcp" "app-engine" "ssl" "waf" "cloud-armor"}
+ :date "2021-07-15"}
+{:title "Blogging with Babashka"
+ :file "blogging-with-babashka.md"
+ :categories #{"clojure"}
+ :date "2021-12-07"}

@@ -1,0 +1,11 @@
+(ns config)
+
+(def +blog-root+ "https://xfthhxk.github.io/blog")
+(def +public-dir+ "public")
+(def +blog-dir+ (str +public-dir+ "/blog"))
+(def +out-dir+ (str +blog-dir+ "/posts"))
+(def +templates-dir+ "templates")
+(def +work-dir+ ".work")
+(def +base-html+ (str +templates-dir+ "/base.html"))
+(def +posts-dir+ "posts")
+(def +posts-edn+ "posts.edn")
