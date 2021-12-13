@@ -1,3 +1,4 @@
+;; NB. Most of the code is from https://github.com/ring-clojure/ring/blob/master/ring-core/src/ring/util/response.clj
 (ns ring
   "Functions for generating and augmenting response maps."
   (:require [clojure.string :as str])

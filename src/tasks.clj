@@ -33,7 +33,8 @@
  :categories {{categories | safe }}
  :date {{date | safe }}}\n"))
 
-(defn now []
+(defn now
+  []
   (pr-str
    (.format (java.time.LocalDate/now)
             (java.time.format.DateTimeFormatter/ofPattern "yyyy-MM-dd"))))
@@ -45,7 +46,8 @@
       (str/replace #" " "-")
       (str ".md")))
 
-(defn new []
+(defn new
+  []
   (let [{:keys [file title]} opts]
     (assert title "Must give title")
     (let [file (or file (gen-file-name title))

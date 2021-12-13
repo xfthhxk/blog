@@ -2,7 +2,6 @@
         org.clojure/data.xml {:mvn/version "0.2.0-alpha6"}
         selmer/selmer {:mvn/version "1.12.44"}
         hiccup/hiccup {:mvn/version "2.0.0-alpha2"}}
-
  :paths ["src"]
  :tasks
  {:requires
@@ -14,16 +13,14 @@
   new {:doc "Create new blog article"
        :task (tasks/new)}
 
+  clean {:doc "Remove work and out directory"
+         :task (do (fs/delete-tree config/+work-dir+)
+                   (fs/delete-tree config/+out-dir+))}
   render {:doc "Render blog"
           :task (tasks/render!)}
 
   publish {:doc "Publish blog"
            :task (tasks/publish!)}
 
-  clean {:doc "Remove .work and public directory"
-         :task (do (fs/delete-tree config/+work-dir+)
-                   (fs/delete-tree config/+out-dir+))}
-
   serve {:doc "Start server"
-         :task (tasks/start-server!)}
-  }}
+         :task (tasks/start-server!)}}}
