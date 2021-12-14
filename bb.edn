@@ -22,5 +22,5 @@
   publish {:doc "Publish blog"
            :task (tasks/publish!)}
 
-  serve {:doc "Start server"
+  watch {:doc "Start server and watch file system for changes."
          :task (tasks/start-server!)}}}

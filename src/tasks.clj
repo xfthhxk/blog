@@ -1,6 +1,7 @@
 (ns tasks
   (:require
    [babashka.fs :as fs]
+   [babashka.pods :as pods]
    [ring]
    [config]
    [clojure.string :as str]
@@ -8,6 +9,9 @@
    [render]
    [org.httpkit.server :as server]
    [selmer.parser :as selmer]))
+
+(pods/load-pod 'org.babashka/filewatcher "0.0.1")
+(require '[pod.babashka.filewatcher :as filewatcher])
 
 (defn parse-opts
   ([opts] (parse-opts opts nil))
@@ -63,8 +67,11 @@
               :append true)))))
 
 (defn render!
-  []
-  (render/render!))
+  ([]
+   (render/render!))
+  ([{:keys [path]}]
+   (render/render! {:watch? true
+                    :path path})))
 
 (defn publish!
   []
@@ -79,15 +86,24 @@
 ;; Server
 ;;----------------------------------------------------------------------
 (defn routes
-  [{:keys [uri] :as _request}]
-  (ring/file-response uri {:root config/+public-dir+}))
+  [{:keys [request-method uri] :as _request}]
+  (case request-method
+    :head  (ring/head-response uri {:root config/+public-dir+})
+    (ring/file-response uri {:root config/+public-dir+})))
 
 (defn start-server!
   []
   (let [opts {:port (or (some-> (System/getenv "PORT")
                                 Integer/parseInt)
-                        8080)}]
+                        8080)}
+        watch-dirs [config/+posts-dir+ config/+templates-dir+]]
+
     (server/run-server #'routes opts)
-    (println "server started " opts)
+    (println "server started " (pr-str opts))
+    (println "watching directories " (pr-str watch-dirs))
+
+    (doseq [dir watch-dirs]
+      (filewatcher/watch dir render!))
+
     ;; block on promise otherwise process will exit
     @(promise)))

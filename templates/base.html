@@ -15,6 +15,12 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/highlight.min.js" integrity="sha512-Pbb8o120v5/hN/a6LjF4N4Lxou+xYZ0QcVF8J6TWhBbHmctQWd8O6xTDmHpE/91OjPzCk4JRoiJsexHYg4SotQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/languages/clojure.min.js" integrity="sha512-GIeXBgFGG/Jkz4Ww9+AckIKcMdpODoSojao/3ALL7bQz2CXVRqGaIOam7/hR9+rn1X953S85c05Qm9jqIxYc8A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
+
+    {% if watch %}
+    <script src="/blog/assets/js/live.js" ></script>
+    {% endif %}
+
+
     <link type="application/atom+xml" rel="alternate" href="blog/atom.xml" title="Hakahaka">
     <link rel="stylesheet" href="/blog/assets/css/style.css">
   </head>
@@ -41,7 +47,7 @@
 
     <div class="wrapper">
 
-      {{body | safe }}
+      {{body|safe}}
 
       {% if not skip-archive %}
       <div style="margin-bottom: 20px; float: right;">

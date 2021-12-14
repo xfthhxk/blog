@@ -137,37 +137,42 @@
       xml/indent-str))
 
 (defn render!
-  []
-  (let [base-html (slurp config/+base-html+)
-        posts (get-posts)]
+  ([] (render! {}))
+  ([{:keys [watch?]
+     :or {watch? false}}]
+   (let [base-html (slurp config/+base-html+)
+         posts (get-posts)]
 
-    (fs/create-dirs config/+out-dir+)
-    (fs/create-dirs (fs/file config/+work-dir+))
+     (fs/create-dirs config/+out-dir+)
+     (fs/create-dirs (fs/file config/+work-dir+))
 
-    ;; generate posts
-    (doseq [post posts]
-      (-> post
-          (merge {:out-dir config/+out-dir+
-                  :base-html base-html})
-          (gen-post!)))
+     ;; generate posts
+     (doseq [post posts]
+       (-> post
+           (merge {:out-dir config/+out-dir+
+                   :base-html base-html
+                   :watch watch?})
+           (gen-post!)))
 
-    ;; Generate archive page
-    (let [links (post-links {:posts posts})]
-      (spit (fs/file config/+blog-dir+ "archive.html")
-            (selmer/render base-html
-                           {:skip-archive true
-                            :body (hiccup/html links)})))
+     ;; Generate archive page
+     (let [links (post-links {:posts posts})]
+       (spit (fs/file config/+blog-dir+ "archive.html")
+             (selmer/render base-html
+                            {:skip-archive true
+                             :watch watch?
+                             :body (hiccup/html links)})))
 
-    ;; generate index page
-    (spit (fs/file config/+blog-dir+ "index.html")
-          (selmer/render base-html
-                         {:body (hiccup/html {:escape-strings? false}
-                                             (index {:posts posts}))}))
+     ;; generate index page
+     (spit (fs/file config/+blog-dir+ "index.html")
+           (selmer/render base-html
+                          {:watch watch?
+                           :body (hiccup/html {:escape-strings? false}
+                                              (index {:posts posts}))}))
 
-    ;; Generate atom feeds
-    (spit (fs/file config/+blog-dir+ "atom.xml") (atom-feed posts))
-    (spit (fs/file config/+blog-dir+ "planetclojure.xml")
-          (atom-feed (filter
-                      (fn [post]
-                        (some (:categories post) ["clojure" "clojurescript"]))
-                      posts)))))
+     ;; Generate atom feeds
+     (spit (fs/file config/+blog-dir+ "atom.xml") (atom-feed posts))
+     (spit (fs/file config/+blog-dir+ "planetclojure.xml")
+           (atom-feed (filter
+                       (fn [post]
+                         (some (:categories post) ["clojure" "clojurescript"]))
+                       posts))))))

@@ -67,14 +67,51 @@
       (.exists file)
         file)))
 
+(defn last-modified-date
+  "Returns the last modified date for a file, rounded down to the nearest
+  second."
+  {:added "1.2"}
+  [^File file]
+  (-> (.lastModified file)
+      (/ 1000) (long) (* 1000)
+      (java.util.Date.)))
+
+(def file-ext->content-type
+  {"js" "application/javascript"
+   "html" "text/html"
+   "css" "text/css"})
+
+(defn guess-content-type
+  [^File file]
+  (let [filename (.getName file)
+        idx (str/last-index-of  filename ".")
+        ext (subs filename (inc idx))]
+    (file-ext->content-type ext)))
+
+
 (defn- file-data [^File file]
-  {:content        file
-   :content-length (.length file)})
+  {:content-type (guess-content-type file)
+   :content        file
+   :content-length (.length file)
+   :last-modified (last-modified-date file)})
 
 (defn- content-length [resp len]
   (if len
     (header resp "Content-Length" len)
     resp))
+
+(defn last-modified
+  [resp date]
+  (if date
+    (header resp "last-modified" date)
+    resp))
+
+(defn content-type
+  [resp ct]
+  (if ct
+    (header resp "content-type" ct)
+    resp))
+
 
 (defn file-response
   "Returns a Ring response to serve a static file, or nil if an appropriate
@@ -90,4 +127,18 @@
    (when-let [file (find-file filepath options)]
      (let [data (file-data file)]
        (-> (response (:content data))
-           (content-length (:content-length data)))))))
+           (content-length (:content-length data))
+           (content-type (:content-type data))
+           (last-modified (:last-modified data)))))))
+
+
+(defn head-response
+  ([filepath] (head-response filepath {}))
+  ([filepath options]
+   (when-let [file (find-file filepath options)]
+     (let [data (file-data file)]
+       (-> {:status 204
+            :headers {"etag" (.lastModified file)}}
+           (content-length (:content-length data))
+           (content-type (:content-type data))
+           (last-modified (:last-modified data)))))))
