@@ -10,7 +10,6 @@
    [selmer.parser :as selmer])
   (:import (java.time.format DateTimeFormatter)))
 
-
 (xml/alias-uri 'atom "http://www.w3.org/2005/Atom")
 
 
@@ -50,7 +49,7 @@
        (sort-by :date (comp - compare))))
 
 (defn gen-post!
-  [{:keys [file base-html out-dir title date]}]
+  [{:keys [file base-html out-dir title date watch?]}]
   (let [cache-file (fs/file config/+work-dir+ (html-file file))
         markdown-file (fs/file config/+posts-dir+ file)
         stale? (seq (fs/modified-since cache-file
@@ -69,7 +68,8 @@
                                            :date date})
         html (selmer/render base-html
                             {:title title
-                             :body body})
+                             :body body
+                             :watch watch?})
         html-file (str/replace file ".md" ".html")]
     (spit (fs/file out-dir html-file) html)))
 
@@ -151,7 +151,7 @@
        (-> post
            (merge {:out-dir config/+out-dir+
                    :base-html base-html
-                   :watch watch?})
+                   :watch? watch?})
            (gen-post!)))
 
      ;; Generate archive page
@@ -174,5 +174,5 @@
      (spit (fs/file config/+blog-dir+ "planetclojure.xml")
            (atom-feed (filter
                        (fn [post]
-                         (some (:categories post) ["clojure" "clojurescript"]))
+                         (some (:tags post) ["clojure" "clojurescript"]))
                        posts))))))

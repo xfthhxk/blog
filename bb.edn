@@ -16,11 +16,14 @@
   clean {:doc "Remove work and out directory"
          :task (do (fs/delete-tree config/+work-dir+)
                    (fs/delete-tree config/+out-dir+))}
+
   render {:doc "Render blog"
           :task (tasks/render!)}
 
-  publish {:doc "Publish blog"
-           :task (tasks/publish!)}
+  publish! {:doc "Publish blog"
+            :depends [clean render]
+            :task (tasks/publish!)}
+
 
   watch {:doc "Start server and watch file system for changes."
          :task (tasks/start-server!)}}}

@@ -8,7 +8,7 @@ is loaded on the page and polls the server for changed files and loads them.
 
 `bb render` will generate html from the markdown files without `live.js`.
 
-`bb publish` will publish the blog.
+`bb publish!` will do a clean, render and publish the blog.
 
 ## License
 A big chunk of the source was adapted from [borkdude's blog](https://github.com/borkdude/blog) and

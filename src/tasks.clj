@@ -6,6 +6,7 @@
    [config]
    [clojure.string :as str]
    [clojure.java.shell :as shell]
+   [clojure.java.io :as io]
    [render]
    [org.httpkit.server :as server]
    [selmer.parser :as selmer]))
@@ -34,7 +35,7 @@
   (str/triml "
 {:title {{title | safe }}
  :file {{file | safe }}
- :categories {{categories | safe }}
+ :tags {{tags | safe }}
  :date {{date | safe }}}\n"))
 
 (defn now
@@ -63,15 +64,25 @@
                              {:title (pr-str title)
                               :file (pr-str file)
                               :date (now)
-                              :categories #{"clojure"}})
+                              :tags #{"clojure"}})
               :append true)))))
+
+
+(defn ignore-file?
+  "Ignore some temp file patterns."
+  [filename]
+  (let [s (-> filename io/file .getName)]
+    (or (str/starts-with? s ".#")
+        (str/ends-with? s ".swp"))))
+
 
 (defn render!
   ([]
    (render/render!))
   ([{:keys [path]}]
-   (render/render! {:watch? true
-                    :path path})))
+   (when-not (ignore-file? path)
+     (render/render! {:watch? true
+                      :path path}))))
 
 (defn publish!
   []
