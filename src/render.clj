@@ -128,7 +128,7 @@
         (for [{:keys [title date file link preview]} posts
               :when (not preview)]
           [::atom/entry
-           [::atom/id link]
+           [::atom/id (str config/+blog-root+ "/" link)]
            [::atom/link {:href link}]
            [::atom/title title]
            [::atom/updated (rfc-3339 date)]

@@ -1,5 +1,9 @@
 # blog
-Static blog generation using babashka.
+Source code for my [blog](https://xfthhxk.github.io/blog/index.html).
+
+
+The blog is generated using babashka.
+
 
 `bb watch` will launch a server on port `8080` and watch
 the `posts` and `templates` directories. Babashka filewatcher pod
